@@ -16,15 +16,9 @@
     <div id="lobby" style="display:none;">
         <h2>Lobby</h2>
         <p>En attente des autres joueurs...</p>
+        <div id="playerList"></div> <!-- Liste des joueurs ici -->
         <button onclick="startGame()">Démarrer la partie</button>
     </div>
-    <div id="lobby" style="display:none;">
-        <h2>Lobby</h2>
-        <p>En attente des autres joueurs...</p>
-        <div id="playerList"></div>
-        <button onclick="startGame()">Démarrer la partie</button>
-    </div>
-
 
     <script>
         const socket = io("https://ton_serveur"); // Remplace par ton URL de serveur
@@ -48,10 +42,31 @@
             socket.emit("startGame"); // Demande au serveur de lancer le quiz
         }
 
-        // Écoute les événements du serveur
+        // Écoute l'événement lorsque le joueur rejoint le lobby
+        socket.on("joinedLobby", (players) => {
+            updatePlayerList(players);
+        });
+
+        // Met à jour la liste des joueurs dans le lobby
+        function updatePlayerList(players) {
+            const playerListElement = document.getElementById("playerList");
+            playerListElement.innerHTML = ""; // Réinitialise la liste
+            players.forEach((player) => {
+                const playerElement = document.createElement("p");
+                playerElement.textContent = player;
+                playerListElement.appendChild(playerElement);
+            });
+        }
+
+        // Met à jour la liste des joueurs en temps réel
+        socket.on("lobbyUpdate", (players) => {
+            updatePlayerList(players);
+        });
+
+        // Lorsque la partie commence
         socket.on("gameStarted", () => {
             alert("La partie a commencé !");
-            // Redirige vers la page de quiz ou change de vue pour commencer le jeu
+            // Redirige ou change de vue pour commencer le jeu
         });
     </script>
 </body>

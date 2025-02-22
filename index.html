@@ -18,6 +18,13 @@
         <p>En attente des autres joueurs...</p>
         <button onclick="startGame()">Démarrer la partie</button>
     </div>
+    <div id="lobby" style="display:none;">
+        <h2>Lobby</h2>
+        <p>En attente des autres joueurs...</p>
+        <div id="playerList"></div>
+        <button onclick="startGame()">Démarrer la partie</button>
+    </div>
+
 
     <script>
         const socket = io("https://ton_serveur"); // Remplace par ton URL de serveur

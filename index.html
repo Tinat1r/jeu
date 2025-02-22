@@ -7,24 +7,45 @@
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 </head>
 <body>
-    <h1>Quiz en ligne</h1>
-    <p id="question">En attente du quiz...</p>
-    <button onclick="sendAnswer('A')">Réponse A</button>
-    <button onclick="sendAnswer('B')">Réponse B</button>
-    <button onclick="sendAnswer('C')">Réponse C</button>
-    <button onclick="sendAnswer('D')">Réponse D</button>
+    <h1>Menu du Quiz</h1>
+    <div id="menu">
+        <label for="username">Entrez votre pseudo :</label>
+        <input type="text" id="username" placeholder="Pseudo" />
+        <button onclick="joinLobby()">Rejoindre le Lobby</button>
+    </div>
+    <div id="lobby" style="display:none;">
+        <h2>Lobby</h2>
+        <p>En attente des autres joueurs...</p>
+        <button onclick="startGame()">Démarrer la partie</button>
+    </div>
 
-    <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io("https://c1630e8b-4525-4b25-a5f6-8fff0fc6e0c6-00-3ow3awq6h6x86.picard.replit.dev/");
+        const socket = io("https://ton_serveur"); // Remplace par ton URL de serveur
 
-        socket.on("newQuestion", (question) => {
-            document.getElementById("question").innerText = question;
-        });
+        function joinLobby() {
+            const username = document.getElementById("username").value;
+            if (username.trim() === "") {
+                alert("Veuillez entrer un pseudo !");
+                return;
+            }
 
-        function sendAnswer(answer) {
-            socket.emit("answer", answer);
+            // Envoie le pseudo au serveur et rejoint le lobby
+            socket.emit("joinLobby", username);
+
+            // Affiche le lobby et cache le menu
+            document.getElementById("menu").style.display = "none";
+            document.getElementById("lobby").style.display = "block";
         }
+
+        function startGame() {
+            socket.emit("startGame"); // Demande au serveur de lancer le quiz
+        }
+
+        // Écoute les événements du serveur
+        socket.on("gameStarted", () => {
+            alert("La partie a commencé !");
+            // Redirige vers la page de quiz ou change de vue pour commencer le jeu
+        });
     </script>
 </body>
 </html>

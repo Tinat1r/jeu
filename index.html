@@ -58,7 +58,7 @@
             });
         }
 
-        // Met à jour la liste des joueurs en temps réel
+        // Met à jour la liste des joueurs en temps réel (tous les joueurs connectés)
         socket.on("lobbyUpdate", (players) => {
             updatePlayerList(players);
         });

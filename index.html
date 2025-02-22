@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Multijoueur</title>
+</head>
+<body>
+    <h1>Quiz en ligne</h1>
+    <p id="question">En attente du quiz...</p>
+    <button onclick="sendAnswer('A')">Réponse A</button>
+    <button onclick="sendAnswer('B')">Réponse B</button>
+    <button onclick="sendAnswer('C')">Réponse C</button>
+    <button onclick="sendAnswer('D')">Réponse D</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io("https://tonserveur.replit.app");
+
+        socket.on("newQuestion", (question) => {
+            document.getElementById("question").innerText = question;
+        });
+
+        function sendAnswer(answer) {
+            socket.emit("answer", answer);
+        }
+    </script>
+</body>
+</html>
